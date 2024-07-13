@@ -8,5 +8,6 @@ import (
 func InitProductRoutes(router *gin.RouterGroup, productController controller.ProductController) {
 
 	router.GET("/products", productController.GetAll)
-
+	router.GET("/products/:id", productController.GetById)
+	router.POST("/products", productController.Create)
 }
