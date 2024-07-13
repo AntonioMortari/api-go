@@ -5,9 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRoutes(router *gin.RouterGroup){
-
-	productController := controller.NewProductController()
+func InitProductRoutes(router *gin.RouterGroup, productController controller.ProductController) {
 
 	router.GET("/products", productController.GetAll)
 
