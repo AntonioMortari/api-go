@@ -25,6 +25,6 @@ func main() {
 
 	routes.InitProductRoutes(&server.RouterGroup, productController)
 
-	server.Run(":3000")
+	server.Run(":8000")
 
 }
