@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/antoniomortari/api-go/models"
+	"github.com/antoniomortari/api-go/rest_err"
 	"github.com/antoniomortari/api-go/service"
 	"github.com/gin-gonic/gin"
 )
@@ -52,13 +53,13 @@ func (pc *ProductController) GetById(ctx *gin.Context){
 	
 	id, err := strconv.Atoi(param)
 	if(err != nil){
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, rest_err.NewBadRequestError("Id precisa ser um número inteiro"))
 		return
 	}
 
-	result, err := pc.service.GetById(id)
-	if(err != nil){
-		ctx.JSON(http.StatusBadRequest, err)
+	result, errGet := pc.service.GetById(id)
+	if(errGet != nil){
+		ctx.JSON(errGet.Status, errGet)
 		return
 	}
 

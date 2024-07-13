@@ -5,13 +5,14 @@ import (
 
 	"github.com/antoniomortari/api-go/models"
 	"github.com/antoniomortari/api-go/repository"
+	"github.com/antoniomortari/api-go/rest_err"
 )
 
 type ProductService struct {
 	repository repository.ProductRepository
 }
 
-func (ps *ProductService) GetAll() ([]models.Product, error) {
+func (ps *ProductService) GetAll() ([]models.Product, *rest_err.RestError) {
 	return ps.repository.GetAll()
 }
 
@@ -27,7 +28,7 @@ func (ps *ProductService) Create(product models.Product) (int, error){
 
 }
 
-func (ps *ProductService) GetById(id int) (*models.Product, error){
+func (ps *ProductService) GetById(id int) (*models.Product, *rest_err.RestError){
 	result, err := ps.repository.GetById(id)
 	if(err != nil){
 		return nil, err
