@@ -75,7 +75,7 @@ func (pr *ProductRepository) GetById(id int) (*models.Product, *rest_err.RestErr
 
 	err = query.QueryRow(id).Scan(&product.Id, &product.Name, &product.Price)
 	if err != nil {
-		if(err == sql.ErrNoRows){
+		if err == sql.ErrNoRows {
 			return nil, rest_err.NewNotFoundError(fmt.Sprintf("Produto de id %d não encontrado", id))
 		}
 		restErr := rest_err.NewInternalServerError()
@@ -87,6 +87,27 @@ func (pr *ProductRepository) GetById(id int) (*models.Product, *rest_err.RestErr
 	fmt.Printf(product.Name)
 
 	return &product, nil
+}
+
+func (pr *ProductRepository) DeleteById(id int) (int, *rest_err.RestError) {
+	query, err := pr.connection.Prepare("DELETE FROM products" + " WHERE id = $1 RETURNING id")
+	if err != nil {
+		rest_err := rest_err.NewInternalServerError()
+		return 0, rest_err
+	}
+
+	var result int
+
+	err = query.QueryRow(id).Scan(&result)
+	if(err != nil){
+		rest_err := rest_err.NewInternalServerError()
+		return 0, rest_err
+	}
+
+	query.Close()
+
+	return result, nil
+	
 }
 
 func NewProductRepository(connection *sql.DB) ProductRepository {

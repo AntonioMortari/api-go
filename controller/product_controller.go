@@ -65,3 +65,21 @@ func (pc *ProductController) GetById(ctx *gin.Context){
 
 	ctx.JSON(http.StatusOK, result)
 }
+
+func(pc *ProductController) DeleteById(ctx *gin.Context){
+	param := ctx.Param("id")
+	
+	id, err := strconv.Atoi(param)
+	if(err != nil){
+		ctx.JSON(http.StatusBadRequest, rest_err.NewBadRequestError("Id precisa ser um número inteiro"))
+		return
+	}
+
+	result,errDelete := pc.service.DeleteById(id)
+	if(errDelete != nil){
+		ctx.JSON(errDelete.Status, errDelete)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
+}
